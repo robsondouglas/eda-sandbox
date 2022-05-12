@@ -1,0 +1,42 @@
+{
+  "name": "eda-examplo",
+  "version": "1.0.0",
+  "description": "Exemplo de implementação",
+  "scripts": {
+    "test": "jest",
+    "start": "yarn dev-bd-mem & yarn dev-app-api & yarn dev-worker-vote & yarn dev-worker-aggregator",
+    "doc": "node swagger.js",
+    "dev-bd-mem": "nodemon src/app/bd/index.js",
+    "dev-app-api": "nodemon src/app/api/index.js",
+    "dev-worker-vote": "nodemon src/app/workers/vote.js",
+    "dev-worker-aggregator": "nodemon src/app/workers/aggregator.js",
+    "dev-ws": "nodemon src/app/ws/index.js",
+    
+    "build-app-bd": "export appname=mem_bd && webpack",
+    "build-app-api": "export appname=vote_api && webpack",
+    "build-app-worker-vote": "export appname=worker_vote && webpack",
+    "build-app-worker-aggregator": "export appname=worker_aggregator && webpack"
+  },
+  "author": "Robson Moraes",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.8.0",
+    "axios": "^0.26.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "firebase-admin": "^10.0.2",
+    "kafkajs": "^1.16.0",
+    "pusher": "^5.0.1",
+    "pusher-client": "^1.1.0",
+    "socket.io": "^4.4.1",
+    "socket.io-client": "^4.4.1"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1",
+    "nodemon": "^2.0.16",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-node-externals": "^3.0.0"
+  }
+}
