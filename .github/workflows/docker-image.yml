@@ -21,6 +21,6 @@ jobs:
           ${{ secrets.DOCKER_PWD }}
         repository
           eda-sandbox-bdmem
-        tags: 
+        tags 
           - latest
           - ${{ github.run_number }}
