@@ -10,10 +10,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Build BDMem image
+    - name: Checkout
       uses: actions/checkout@v3
+      
+    - name: Build BDMem image
+      uses: docker/build-push-actions@v1
       with:
         username: robsondouglas
         password: ${{ secrets.DOCKER_PWD }}
         repository: eda-sandbox-bdmem
-        tags: latest, ${{ github.run_number }}
+        tags: latest, github.run_number        
+        
