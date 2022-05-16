@@ -18,10 +18,11 @@ jobs:
         username: robsondouglas
         password: ${{ secrets.DOCKER_PWD }}  
     - name: Build BDMem image
-      uses: docker/build-push-action@v2
+      uses: docker/build-push-action@v3
       with:
         repository: eda-sandbox-bdmem
         file: ./.devcontainer/dockerfile
         build-args: app_name=build-app-bd
+        push: true
         tags: latest, ${{github.run_number}}        
         
