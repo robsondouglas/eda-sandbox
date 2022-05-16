@@ -19,5 +19,5 @@ jobs:
         username: robsondouglas
         password: ${{ secrets.DOCKER_PWD }}
         repository: eda-sandbox-bdmem
-        tags: latest, github.run_number        
+        tags: latest, ${{github.run_number}}        
         
