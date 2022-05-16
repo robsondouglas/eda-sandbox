@@ -22,5 +22,6 @@ jobs:
       with:
         repository: eda-sandbox-bdmem
         file: ./.devcontainer/dockerfile
+        build-args: app_name=build-app-bd
         tags: latest, ${{github.run_number}}        
         
