@@ -1,32 +1,31 @@
-const {describe, expect, it } = require('@jest/globals')
+
 const dotenv  = require('dotenv');
 dotenv.config();
-const { default: axios } = require('axios')
-
-
+const { BDKeyValue } = require('../src/adapters/bd-keyvalue/index');
+const MemBD = require('../src/adapters/bd-keyvalue/membd');
 
 describe('MEMBD', ()=>{
     let key = (new Date()).valueOf()
 
     it('EXEC', async()=>{
-        let expression = `(itm) => {
+        let tst = (itm) => {
             if(itm.value)
             { itm.value.qtd++}
             else
             { itm.value = {qtd: 1} }
             return itm
-        }`
-
+        }
         
-        let res = await axios.patch(`${process.env.DB_URL}/teste_update/${key}`, {expression: expression})
-        expect(res.data.value.qtd).toEqual(1)
-        
-        res = await axios.patch(`${process.env.DB_URL}/teste_update/${key}`, {expression: expression})
-        expect(res.data.value.qtd).toEqual(2)
+        await expect(MemBD.exec('teste_update', key, tst).then(v=>v.value)).resolves.toMatchObject({qtd: 1})
+        await expect(MemBD.exec('teste_update', key, tst).then(v=>v.value)).resolves.toMatchObject({qtd: 2})        
     })
 
     it('GET', async()=>{
-        res = await axios.get(`${process.env.DB_URL}/teste_update/${key}`)
-        expect(res.data.value.qtd).toEqual(2)
+        await expect(MemBD.get('teste_update', key).then(v=>v.value)).resolves.toMatchObject({qtd: 2})
+    })
+
+    it('LIST', async()=>{
+        res = await MemBD.take('teste_update')
+        expect(res.length).toEqual(1)
     })
 })

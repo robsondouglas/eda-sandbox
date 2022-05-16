@@ -1,18 +1,18 @@
-FROM node:17
-
-ARG app_name
-
+FROM node:17 as init
 WORKDIR /usr/api
-
 COPY webpack.config.js .
 COPY package.json .
 RUN npm i
 
+FROM init as build
+
+ARG app_name
+ARG port_number=8080
 COPY src/ ./src
 RUN npm run $app_name
 RUN rm -rf src/
-RUN rm -rf webpack.config.js
-RUN rm -rf package.json
 
 WORKDIR /usr/api/dist
+EXPOSE $port_number
+ENV PORT_NUMBER=$port_number
 CMD node index.js

@@ -2,7 +2,7 @@ const path = require('path')
 const nodeExternals = require('webpack-node-externals')
 
 const entryFile = {
-    'mem_bd': './src/app/bd/index.js',
+    'bd-mem': './src/app/bd/index.js',
     'vote_api': './src/app/api/index.js',
     'worker_vote': './src/app/worker/vote.js',
     'worker_aggregator': './src/app/worker/aggregator.js'

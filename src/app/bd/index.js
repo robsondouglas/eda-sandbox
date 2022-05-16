@@ -1,12 +1,20 @@
 const dotenv = require('dotenv')
 dotenv.config();
-
 const apiPort = require('../../ports/webserver/index');
     
 const db = {}
 
 const eng = {
-    list : (entity) => db[entity],
+    take : (entity, filter, page = 0, size) => {
+        if(db[entity] === undefined)
+        { return [] }
+        else
+        {
+            let itms = filter ? db[entity].filter(filter) : db[entity]
+            return itms.slice( page*size, size === 0 ? itms.length : size )
+        }
+        
+    },
     find : (entity, key)        => db[entity]?.find( f=> f.key === key),
     save:   (entity, key, value) => {
         if(!db[entity])
@@ -49,19 +57,16 @@ const eng = {
             console.log('Falha ao executar a expressão', expression, ex)
             return null
         }
-        
     }
 }
-
 
 async function init(){
     const routes = [
         { 
-            method: 'GET',  
-            path:'/bd/:entity/all',  
+            method: 'POST',  
+            path:'/bd/:entity/take',  
             delegate: async({params}) => {
-                console.log('list')
-                return {status:200, body: eng.list(params.entity)}
+                return {status:200, body: eng.take(params.entity, params.page, params.size)}
             }
         },
         { 
@@ -69,7 +74,6 @@ async function init(){
             path:'/bd/:entity/:key',  
             delegate: async({params}) => {
                 if(params.key) {
-                    console.log('get', params.entity, params.key)
                     let res = eng.find(params.entity, params.key)
                     return res ? {status:200, body: res} : {status:404}
                 }
@@ -95,7 +99,7 @@ async function init(){
         }
     ];
     
-    let port = process.env.BD_PORT || 80
+    let port = process.env.PORT_NUMBER || 80
     console.log('INICIANDO BD:', port)
     apiPort.start({routes: routes, port: port});
 }

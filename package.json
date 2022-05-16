@@ -12,7 +12,7 @@
     "dev-worker-aggregator": "nodemon src/app/workers/aggregator.js",
     "dev-ws": "nodemon src/app/ws/index.js",
     
-    "build-app-bd": "export appname=mem_bd && webpack",
+    "build-app-bd": "export appname=bd-mem && webpack",
     "build-app-api": "export appname=vote_api && webpack",
     "build-app-worker-vote": "export appname=worker_vote && webpack",
     "build-app-worker-aggregator": "export appname=worker_aggregator && webpack"
