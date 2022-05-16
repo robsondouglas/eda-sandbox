@@ -1,0 +1,23 @@
+name: eda-sandbox
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      
+    - name: Build BDMem image
+      uses: docker/build-push-action@v1
+      with:
+        username: robsondouglas
+        password: ${{ secrets.DOCKER_PWD }}
+        repository: eda-sandbox-bdmem
+        tags: latest, github.run_number        
+        
