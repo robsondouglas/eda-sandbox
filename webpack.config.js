@@ -4,8 +4,8 @@ const nodeExternals = require('webpack-node-externals')
 const entryFile = {
     'bd-mem': './src/app/bd/index.js',
     'vote_api': './src/app/api/index.js',
-    'worker_vote': './src/app/worker/vote.js',
-    'worker_aggregator': './src/app/worker/aggregator.js'
+    'worker_vote': './src/app/workers/vote.js',
+    'worker_aggregator': './src/app/workers/aggregator.js'
 }[process.env.appname]
 
 
