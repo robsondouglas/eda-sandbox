@@ -1,13 +1,10 @@
 name: eda-sandbox
 
 on:
-  workflow_run:
-    workflows: ["Build"]
-    types: [requested]
-    branches:
-      - 'main'
+  release
 jobs:
   build:
+    if: ${GITHUB_REF/refs\/tags\//} != ''
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
