@@ -8,10 +8,15 @@ Boa parte desse material está disponível no Youtube.
 
 ## TO-DOs
 São tantos que preciso da ajuda de vocês pra montar essa lista, mas vou colocar algumas coisas que acredito que possa ser útil
+
 [ ] 100% de cobertura de testes
+
 [ ] Front-end de votação
+
 [ ] Front-end de monitoramento
+
 [ ] Documentação
+
 
 ## Código de conduta
 Inicialmente será apenas o nosso grupo de estudos que terá os PRs aprovados. Pra isso, basta avisar la no Whatsapp e  
