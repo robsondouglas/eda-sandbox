@@ -5,7 +5,8 @@ const entryFile = {
     'bd-mem': './src/app/bd/index.js',
     'vote_api': './src/app/api/index.js',
     'worker_vote': './src/app/workers/vote.js',
-    'worker_aggregator': './src/app/workers/aggregator.js'
+    'worker_aggregator': './src/app/workers/aggregator.js',
+    'ws_server': './src/ws/index.js'
 }[process.env.appname]
 
 

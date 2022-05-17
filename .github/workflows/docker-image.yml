@@ -57,3 +57,11 @@ jobs:
         file: ./.devcontainer/dockerfile
         build-args: app_name=build-app-worker-aggregator
         tags: ${{ secrets.DOCKER_USR }}/eda-sandbox-workeraggregator:latest, ${{ secrets.DOCKER_USR }}/eda-sandbox-workeraggregator:${{ env.RELEASE_VERSION }}
+
+    - name: BUILD and WebSocket server image
+      uses: docker/build-push-action@v3
+      with:
+        push: true
+        file: ./.devcontainer/dockerfile
+        build-args: app_name=build-app-ws
+        tags: ${{ secrets.DOCKER_USR }}/eda-sandbox-websocket:latest, ${{ secrets.DOCKER_USR }}/eda-sandbox-websocket:${{ env.RELEASE_VERSION }}

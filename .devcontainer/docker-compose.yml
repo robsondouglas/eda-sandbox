@@ -8,7 +8,7 @@ services:
     environment:
       ALLOW_ANONYMOUS_LOGIN: 'yes'
     networks:
-      - ntt-eda
+      - eda-sandbox
 
   kafka1:
     image: docker.io/bitnami/kafka:3.1
@@ -28,7 +28,7 @@ services:
       KAFKA_DELETE_TOPIC_ENABLE: 'true'
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: '0'
     networks:
-      - ntt-eda
+      - eda-sandbox
     depends_on:
       - zookeeper
 
@@ -50,7 +50,7 @@ services:
       KAFKA_DELETE_TOPIC_ENABLE: 'true'
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: '0'
     networks:
-      - ntt-eda
+      - eda-sandbox
     depends_on:
       - zookeeper
 
@@ -72,7 +72,7 @@ services:
       KAFKA_DELETE_TOPIC_ENABLE: 'true'
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: '0'
     networks:
-      - ntt-eda
+      - eda-sandbox
     depends_on:
       - zookeeper
 
@@ -82,7 +82,7 @@ services:
     # ports: 
     #   - 15672:15672
     networks:
-      - ntt-eda
+      - eda-sandbox
   
   source:
     image: node:17
@@ -91,7 +91,7 @@ services:
     volumes:
       - ..:/workspace/source
     networks:
-      - ntt-eda
+      - eda-sandbox
 
   membd:
     hostname: eda-membd
@@ -102,7 +102,7 @@ services:
       args:
         app_name: build-app-bd
     networks:
-      - ntt-eda
+      - eda-sandbox
 
   vote:
     hostname: eda-vote
@@ -113,10 +113,10 @@ services:
       args:
         app_name: build-app-api
     networks:
-      - ntt-eda
+      - eda-sandbox
 
 
 networks:
-  ntt-eda:
+  eda-sandbox:
     driver: bridge 
 

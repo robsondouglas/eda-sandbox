@@ -4,7 +4,6 @@
   "description": "Exemplo de implementação",
   "scripts": {
     "test": "jest",
-    "start": "yarn dev-bd-mem & yarn dev-app-api & yarn dev-worker-vote & yarn dev-worker-aggregator",
     "doc": "node swagger.js",
     "dev-bd-mem": "nodemon src/app/bd/index.js",
     "dev-app-api": "nodemon src/app/api/index.js",
@@ -15,7 +14,8 @@
     "build-app-bd": "export appname=bd-mem && webpack",
     "build-app-api": "export appname=vote_api && webpack",
     "build-app-worker-vote": "export appname=worker_vote && webpack",
-    "build-app-worker-aggregator": "export appname=worker_aggregator && webpack"
+    "build-app-worker-aggregator": "export appname=worker_aggregator && webpack",
+    "build-app-ws": "export appname=ws_server && webpack"
   },
   "author": "Robson Moraes",
   "license": "ISC",
