@@ -8,7 +8,6 @@ on:
       - 'main'
 jobs:
   build:
-    if: startsWith(github.ref, 'refs/tags/build-')
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -20,13 +19,33 @@ jobs:
     - name: Login to DockerHub
       uses: docker/login-action@v2
       with:
-        username: robsondouglas
+        username: ${{ secrets.DOCKER_USR }}
         password: ${{ secrets.DOCKER_PWD }}
-    - name: BUILD and PUSH BDMem image
-      if: startsWith(github.ref, 'refs/tags/build-app-bd')
+    - name: BUILD and PUSH BD image
       uses: docker/build-push-action@v3
       with:
         push: true
         file: ./.devcontainer/dockerfile
         build-args: app_name=build-app-bd
-        tags: robsondouglas/eda-sandbox-bdmem:latest, robsondouglas/eda-sandbox-bdmem:${{github.run_number}}
+        tags: ${{ secrets.DOCKER_USR }}/eda-sandbox-bdmem:latest, ${{ secrets.DOCKER_USR }}/eda-sandbox-bdmem:${GITHUB_REF/refs\/tags\//}
+    - name: BUILD and PUSH API Vote image
+      uses: docker/build-push-action@v3
+      with:
+        push: true
+        file: ./.devcontainer/dockerfile
+        build-args: app_name=build-app-api
+        tags: ${{ secrets.DOCKER_USR }}/eda-sandbox-bdmem:latest, ${{ secrets.DOCKER_USR }}/eda-sandbox-apivote:${GITHUB_REF/refs\/tags\//}
+    - name: BUILD and PUSH WORKER Vote image
+      uses: docker/build-push-action@v3
+      with:
+        push: true
+        file: ./.devcontainer/dockerfile
+        build-args: app_name=build-app-worker-vote
+        tags: ${{ secrets.DOCKER_USR }}/eda-sandbox-bdmem:latest, ${{ secrets.DOCKER_USR }}/eda-sandbox-workervote:${GITHUB_REF/refs\/tags\//}
+    - name: BUILD and PUSH WORKER Aggregator image
+      uses: docker/build-push-action@v3
+      with:
+        push: true
+        file: ./.devcontainer/dockerfile
+        build-args: app_name=build-app-worker-aggregator
+        tags: ${{ secrets.DOCKER_USR }}/eda-sandbox-bdmem:latest, ${{ secrets.DOCKER_USR }}/eda-sandbox-workeraggregator:${GITHUB_REF/refs\/tags\//}
