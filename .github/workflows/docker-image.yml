@@ -40,7 +40,7 @@ jobs:
         push: true
         file: ./.devcontainer/dockerfile
         build-args: app_name=build-app-api
-        tags: ${{ secrets.DOCKER_USR }}/eda-sandbox-bdmem:latest, ${{ secrets.DOCKER_USR }}/eda-sandbox-apivote:${{ env.RELEASE_VERSION }}
+        tags: ${{ secrets.DOCKER_USR }}/eda-sandbox-apivote:latest, ${{ secrets.DOCKER_USR }}/eda-sandbox-apivote:${{ env.RELEASE_VERSION }}
         
     - name: BUILD and PUSH WORKER Vote image
       uses: docker/build-push-action@v3
@@ -48,7 +48,7 @@ jobs:
         push: true
         file: ./.devcontainer/dockerfile
         build-args: app_name=build-app-worker-vote
-        tags: ${{ secrets.DOCKER_USR }}/eda-sandbox-bdmem:latest, ${{ secrets.DOCKER_USR }}/eda-sandbox-workervote:${{ env.RELEASE_VERSION }}
+        tags: ${{ secrets.DOCKER_USR }}/eda-sandbox-workervote:latest, ${{ secrets.DOCKER_USR }}/eda-sandbox-workervote:${{ env.RELEASE_VERSION }}
         
     - name: BUILD and PUSH WORKER Aggregator image
       uses: docker/build-push-action@v3
@@ -56,4 +56,4 @@ jobs:
         push: true
         file: ./.devcontainer/dockerfile
         build-args: app_name=build-app-worker-aggregator
-        tags: ${{ secrets.DOCKER_USR }}/eda-sandbox-bdmem:latest, ${{ secrets.DOCKER_USR }}/eda-sandbox-workeraggregator:${{ env.RELEASE_VERSION }}
+        tags: ${{ secrets.DOCKER_USR }}/eda-sandbox-workeraggregator:latest, ${{ secrets.DOCKER_USR }}/eda-sandbox-workeraggregator:${{ env.RELEASE_VERSION }}
