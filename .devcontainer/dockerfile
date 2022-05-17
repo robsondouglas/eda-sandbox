@@ -4,14 +4,14 @@ COPY webpack.config.js .
 COPY package.json .
 RUN npm i
 
-FROM init as build
+FROM init as source
+COPY src/ ./src
 
+FROM source as build
 ARG app_name
 ARG port_number=8080
-COPY src/ ./src
 RUN npm run $app_name
 RUN rm -rf src/
-
 WORKDIR /usr/api/dist
 EXPOSE $port_number
 ENV PORT_NUMBER=$port_number
