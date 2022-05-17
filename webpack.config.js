@@ -6,7 +6,7 @@ const entryFile = {
     'vote_api': './src/app/api/index.js',
     'worker_vote': './src/app/workers/vote.js',
     'worker_aggregator': './src/app/workers/aggregator.js',
-    'ws_server': './src/ws/index.js'
+    'ws_server': './src/app/ws/index.js'
 }[process.env.appname]
 
 
