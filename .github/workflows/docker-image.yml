@@ -4,7 +4,6 @@ on:
   release
 jobs:
   build:
-    if: ${GITHUB_REF/refs\/tags\//} != ''
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
