@@ -7,19 +7,13 @@ Escolhemos um caso de uso de votação, onde aparece uma pequena lista de opçõ
 Boa parte desse material está disponível no Youtube.
 
 ## TO-DOs
-São tantos que preciso da ajuda de vocês pra montar essa lista, mas vou colocar algumas coisas que acredito que possa ser útil
-
-[ ] 100% de cobertura de testes
-
-[ ] Front-end de votação
-
-[ ] Front-end de monitoramento
-
-[ ] Documentação
-
+São tantos que preciso da ajuda de vocês pra montar essa lista, mas vou colocar algumas coisas que acredito que possam ser úteis
+- [ ] Front-end de votação
+- [ ] Front-end de monitoramento
+- [ ] 100% de cobertura de testes
 
 ## Código de conduta
-Inicialmente será apenas o nosso grupo de estudos que terá os PRs aprovados. Pra isso, basta avisar la no Whatsapp e  
+Inicialmente será apenas o nosso grupo de estudos que terá os PRs aprovados. Pra isso, basta avisar la no Whatsapp e vou autorizando aqui  
 
 ## DESENVOLVIMENTO
 ### Ambiente
@@ -32,6 +26,29 @@ Temos o RabbitMQ e um cluster com 3 nós do Kafka para realizar a mensageria.
 Podemos adicionar mais recursos para enriquecer o modelo, mas considerando sempre a viabilidade do ambiente de desenvolvimento. Nem todos possuem um Core I9 com 64GB de RAM.
 
 ### Código
-Inicialmente com uma API de captura dos votos e 2 WORKERS que são responsáveis por armazear o voto capturado e fazer a agregação das contagens respectivamente. Ambos desenvolvidos em NodeJS. 
+Inicialmente com uma API de captura dos votos, 2 WORKERS que são responsáveis por armazear o voto capturado e fazer a agregação das contagens respectivamente e um servidor Websocket que mantém o front atualizado em tempo real. Ambos desenvolvidos em NodeJS. 
 
+### As aplicações
+> **API/BDMem**
+> Banco de dados em memória que responde via http, utilizado para simular um BD NO-SQL para os testes iniciais
+> **rodando em modo dev**: *"npm run dev-bd-mem"* ou *"yarn dev-bd-mem"*  
+> [DockerHub](https://hub.docker.com/r/robsondouglas/eda-sandbox-bdmem)
 
+> **API/Vote**
+> Api que disponibiliza os recursos necessários para realizar a votação
+> **rodando em modo dev**: *"npm run dev-app-api"* ou *"yarn dev-app-api"*  
+> [DockerHub](https://hub.docker.com/r/robsondouglas/eda-sandbox-apivote)
+
+> **Workers/Vote**
+> Armazena o voto e dispara o evento de voto capturado
+> **rodando em modo dev**: *"npm run dev-worker-vote"* ou *"yarn dev-worker-vote"*  
+> [DockerHub](https://hub.docker.com/r/robsondouglas/eda-sandbox-workervote)
+
+ > **Workers/Agregator:** 
+ > Gera os agregadores de dados que formarão os dashboards, identifica novos eventos e dispara as notificações via WebSocket
+ > **rodando em modo dev**: *"npm run dev-worker-aggregator"* ou *"yarn dev-worker-aggregator"*  
+> [DockerHub](https://hub.docker.com/repository/docker/robsondouglas/eda-sandbox-workeraggregator)
+ 
+> **WS/index:** Serviço de websocket, que servirá para comunicação realtime com aplicações front-end.
+> **rodando em modo dev**: *"npm run dev-ws"* ou *"yarn dev-ws"*  
+> [DockerHub](https://hub.docker.com/r/robsondouglas/eda-sandbox-websocket)
