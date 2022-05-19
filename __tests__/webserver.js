@@ -36,23 +36,26 @@ const update = async({body})=>{
     return { status: 200, body: itm };
 };
 
-const _delete = async({body})=>{
-    let idx = expected.items.findIndex(f=>f.id === body.id);
+const _delete = async({params})=>{
+    console.log('delete: ', params);
+    let idx = expected.items.findIndex(f=>f.id === params.id);
+    console.log('index: ', idx);
     expected.items.splice(idx, 1);
+    console.log('length: ', expected.items.length);
     return { status: 200 };
 };
 
 
-beforeAll(()=> {
+beforeAll(async()=> {
     const routes = [
         { method: 'GET',    path: expected.path,           delegate: async() => ({ status: 200, body: expected.items })},
         { method: 'GET',    path: `${expected.path}/:id`,  delegate: find },
         { method: 'POST',   path:expected.path,            delegate: insert },
         { method: 'PUT',    path: expected.path,           delegate: update },
-        { method: 'DELETE', path: expected.path,           delegate: _delete },
+        { method: 'DELETE', path: `${expected.path}/:id`,  delegate: _delete },
     ];
 
-    apiPort.start({routes: routes, port: testPort});
+    await apiPort.start({routes: routes, port: testPort});
 });
 
 afterAll(()=>  apiPort.stop(testPort))
@@ -108,8 +111,7 @@ describe('WEBSERVER - FLUXO PRINCIPAL', ()=>{
 
     describe("EXCLUSÃO DE DADOS", ()=>{
         it('DELETE', async()=>{
-            const itm = {id: expected.newId };
-            let res = await axios.delete(`${testUrl}${expected.path}`, itm); 
+            let res = await axios.delete(`${testUrl}${expected.path}/${expected.newId}`); 
             expect(res.status).toBe(200);            
         });
 

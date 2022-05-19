@@ -5,12 +5,11 @@
   "scripts": {
     "test": "jest",
     "doc": "node swagger.js",
-    "dev-bd-mem": "nodemon src/app/bd/index.js",
+    "dev-bd-mem": "export PORT_NUMBER=4002 && nodemon src/app/bd/index.js",
     "dev-app-api": "nodemon src/app/api/index.js",
     "dev-worker-vote": "nodemon src/app/workers/vote.js",
     "dev-worker-aggregator": "nodemon src/app/workers/aggregator.js",
     "dev-ws": "nodemon src/app/ws/index.js",
-    
     "build-app-bd": "export appname=bd-mem && webpack",
     "build-app-api": "export appname=vote_api && webpack",
     "build-app-worker-vote": "export appname=worker_vote && webpack",
@@ -25,6 +24,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "fastify": "^3.29.0",
     "firebase-admin": "^10.0.2",
     "kafkajs": "^1.16.0",
     "pusher": "^5.0.1",
