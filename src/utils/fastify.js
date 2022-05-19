@@ -26,6 +26,7 @@ const server = {
         { bindRoutes(fastify, route) };
         
         await fastify.listen(port);
+        Log.log(`Iniciando Servidor Nodejs + fastify na porta ${port}`)
         servers.push({port: port, srv: fastify})
         return fastify;
         
@@ -34,7 +35,7 @@ const server = {
         const idx = servers.findIndex(f=>f.port === port);
         if(idx >=0 )
         {
-            Log.log(`Encerrando Servidor Nodejs + express na porta ${port}`)
+            Log.log(`Encerrando Servidor Nodejs + fastify na porta ${port}`)
             await servers[idx]?.srv.close();
             delete servers[idx];
             servers.splice(idx, 1);
