@@ -33,7 +33,7 @@ function closeConnection(srv){
 }
 
 async function getChannel(srv){
-    Log.log('Obtendo canal', srv); 
+    Log.log('Obtendo canal', srv, new Date()); 
     if(conns[srv])
     { return  await conns[srv].createChannel()}
     else

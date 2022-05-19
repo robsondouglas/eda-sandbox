@@ -1,12 +1,12 @@
 
 const dotenv  = require('dotenv');
 dotenv.config();
-const { BDKeyValue } = require('../src/adapters/bd-keyvalue/index');
 const MemBD = require('../src/adapters/bd-keyvalue/membd');
+const {randomUUID} = require('crypto');
 
 describe('MEMBD', ()=>{
     let key = (new Date()).valueOf()
-
+    const entityTest = `entity_teste_${randomUUID()}`
     it('EXEC', async()=>{
         let tst = (itm) => {
             if(itm.value)

@@ -1,6 +1,7 @@
 const dotenv = require('dotenv')
 dotenv.config();
-const apiPort = require('../../ports/webserver/index');
+const apiPort   = require('../../ports/webserver/index');
+const Log       = require('../../adapters/log');
     
 const db = {}
 
@@ -54,7 +55,7 @@ const eng = {
         { return fnc(itm) }
         catch(ex)
         {
-            console.log('Falha ao executar a expressão', expression, ex)
+            Log.log('Falha ao executar a expressão', expression, ex)
             return null
         }
     }
@@ -99,8 +100,9 @@ async function init(){
         }
     ];
     
-    let port = process.env.PORT_NUMBER || 80
-    console.log('INICIANDO BD:', port)
+    const port = process.env.PORT_NUMBER 
+    
+    Log.log('INICIANDO BD:', port)
     apiPort.start({routes: routes, port: port});
 }
 init()

@@ -1,0 +1,149 @@
+version: '3.9'
+
+services:
+  zookeeper:
+    image: docker.io/bitnami/zookeeper:3.8
+    hostname: eda-zookeeper
+    container_name: eda-zookeeper
+    environment:
+      ALLOW_ANONYMOUS_LOGIN: 'yes'
+    networks:
+      - eda-sandbox-prod
+
+  kafka1:
+    image: docker.io/bitnami/kafka:3.1
+    hostname: eda-kafka-01
+    container_name: eda-kafka-01
+    environment:
+      KAFKA_BROKER_ID: '0'
+      KAFKA_CFG_ZOOKEEPER_CONNECT: 'eda-zookeeper:2181'
+      KAFKA_LISTENERS: PLAINTEXT://eda-kafka-01:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://eda-kafka-01:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_DEFAULT_REPLICATION_FACTOR: '2'
+      KAFKA_NUM_PARTITIONS: '2'
+      ALLOW_PLAINTEXT_LISTENER: 'yes'
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: '0'
+    networks:
+      - eda-sandbox-prod
+    depends_on:
+      - zookeeper
+
+  kafka2:
+    image: docker.io/bitnami/kafka:3.1
+    hostname: eda-kafka-02
+    container_name: eda-kafka-02
+    environment:
+      KAFKA_BROKER_ID: '1'
+      KAFKA_CFG_ZOOKEEPER_CONNECT: 'eda-zookeeper:2181'
+      KAFKA_LISTENERS: PLAINTEXT://eda-kafka-02:29093,PLAINTEXT_HOST://localhost:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://eda-kafka-02:29093,PLAINTEXT_HOST://localhost:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_DEFAULT_REPLICATION_FACTOR: '2'
+      KAFKA_NUM_PARTITIONS: '2'
+      ALLOW_PLAINTEXT_LISTENER: 'yes'
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: '0'
+    networks:
+      - eda-sandbox-prod
+    depends_on:
+      - zookeeper
+
+  kafka3:
+    image: docker.io/bitnami/kafka:3.1
+    hostname: eda-kafka-03
+    container_name: eda-kafka-03
+    environment:
+      KAFKA_BROKER_ID: '2'
+      KAFKA_CFG_ZOOKEEPER_CONNECT: 'eda-zookeeper:2181'
+      KAFKA_LISTENERS: PLAINTEXT://eda-kafka-03:29094,PLAINTEXT_HOST://localhost:9094
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://eda-kafka-03:29094,PLAINTEXT_HOST://localhost:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_DEFAULT_REPLICATION_FACTOR: '2'
+      KAFKA_NUM_PARTITIONS: '2'
+      ALLOW_PLAINTEXT_LISTENER: 'yes'
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: '0'
+    networks:
+      - eda-sandbox-prod
+    depends_on:
+      - zookeeper
+
+  rabbit:
+    image: docker.io/rabbitmq:3.9.14-management
+    container_name: eda-rabbit
+    # ports: 
+    #   - 15672:15672
+    networks:
+      - eda-sandbox-prod
+  
+  membd:
+    hostname: eda-membd
+    container_name: eda-membd
+    image: docker.io/robsondouglas/eda-sandbox-bdmem
+    environment:
+      WRITE_LOG: 1
+      PORT_NUMBER: 5001
+    networks:
+      - eda-sandbox-prod
+
+  ws:
+    hostname: eda-ws
+    container_name: eda-ws
+    image: docker.io/robsondouglas/eda-sandbox-websocket    
+    environment:
+      WRITE_LOG: 1
+      PORT_NUMBER: 5002
+    networks:
+      - eda-sandbox-prod
+
+  apivote:
+    hostname: eda-api-vote
+    container_name: eda-api-vote
+    image: docker.io/robsondouglas/eda-sandbox-apivote
+    environment:
+      WRITE_LOG: 1
+      PORT_NUMBER: 5001
+      QUEUE_URL: http://eda-rabbit/
+      DB_URL:  http://eda-membd:5001/
+    networks:
+      - eda-sandbox-prod
+
+  wrkvote:
+    hostname: eda-wrk-vote
+    container_name: eda-wrk-vote
+    image: docker.io/robsondouglas/eda-sandbox-workervote
+    environment:
+      WRITE_LOG: 1
+      QUEUE_URL: http://eda-rabbit/
+      KAFKA_SERVER: "eda-kafka-01:29092, eda-kafka-02:29093, eda-kafka-03:29094"
+      KAFKA_GROUP_ID: "eda-01"
+      DB_URL:  http://eda-membd:5001/
+      WS_URL:  http://eda-eda-ws:5002/
+    networks:
+      - eda-sandbox-prod
+
+  wrkaggr:
+    hostname: eda-wrk-aggr
+    container_name: eda-wrk-aggr
+    image: docker.io/robsondouglas/eda-sandbox-workeraggregator 
+    environment:
+      WRITE_LOG: 1
+      KAFKA_SERVER: "eda-kafka-01:29092, eda-kafka-02:29093, eda-kafka-03:29094"
+      KAFKA_GROUP_ID: "eda-01"
+      DB_URL:  http://eda-membd:5001/
+      WS_URL:  http://eda-eda-ws:5002/
+    networks:
+      - eda-sandbox-prod
+
+networks:
+  eda-sandbox-prod:
+    driver: bridge 
+

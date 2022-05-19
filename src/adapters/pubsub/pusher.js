@@ -9,7 +9,6 @@ const pubsub = {
             secret:     process.env.PUSHER_APP_SECRET,
             cluster:    process.env.PUSHER_APP_CLUSTER
         });
-       // conn.bind('connected', (res) => {console.log('CONECTADO', res)})
                 
     },
     send : (channel, event, msg)=> {

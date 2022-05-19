@@ -2,36 +2,34 @@ const dotenv = require('dotenv')
 dotenv.config();
 
 const wsServer = require('../../ports/websocket/index');
+const Log       = require('../../adapters/log');
 
 async function init(){
     const clients = []
+    const port = process.env.PORT_NUMBER 
+    
     let events = [
         {
             event: 'QTD_NOTIFICATION', 
             delegate: async(id, msg)=> {
-                console.log('QTD_NOTIFICATION', msg)
-                await wsServer.send({port: process.env.WSPORT, event: 'QTD_CHANGED', msg: msg})
+                Log.log('QTD_NOTIFICATION', msg)
+                await wsServer.send({port: port, event: 'QTD_CHANGED', msg: msg})
             }
         }
     ];
 
     const OnConnect = async(id)=>{
-        // clients.push(id)
-        // console.log(clients)
-        // await wsServer.send({port: process.env.WSPORT, event: 'USERS_CONNECTEDS', msg: clients.length.toString()})
+        Log.log('connected', id)
     }
 
     const OnDisconnect = async(id)=>{
-        // console.log(clients)
-        // if(clients.length>0)
-        // {clients.splice( clients.findIndex(id), 1) }
-        // await wsServer.send({port: process.env.WSPORT, event: 'USERS_CONNECTEDS', msg: clients.length.toString()})
+        Log.log('disconnected', id)
     }
-
-    console.log('INICIANDO SERVIDOR WEBSOCKET', process.env.WSPORT)
+    
+    Log.log('INICIANDO SERVIDOR WEBSOCKET', port)
     wsServer.start({
         events: events, 
-        port:   process.env.WSPORT, 
+        port:   port, 
         onConnect: OnConnect, 
         onDisconnect: OnDisconnect 
     }); 

@@ -5,9 +5,9 @@ const pubsub = {
             if(!conn[connName])
             {
                 let Pusher = require('pusher-client');       
-                console.log('iniciando ', connName); 
+                Log.log('iniciando ', connName); 
                 conn[connName] = new Pusher(process.env.PUSHER_APP_KEY, { cluster: process.env.PUSHER_APP_CLUSTER });
-                conn[connName].bind('connected', (res) => {console.log('CONECTADO', res); resolve()})
+                conn[connName].bind('connected', (res) => {Log.log('CONECTADO', res); resolve()})
             }
             else{
                 reject(new Error('Já existe uma conexão com esse nome'))   

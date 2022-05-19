@@ -1,15 +1,16 @@
-const { default: axios } = require('axios')
+const dotenv = require('dotenv')
+dotenv.config();
 const Log = require('../../adapters/log')
 const psAdapter = require('../../adapters/pubsub/index')
-const dotenv = require('dotenv')
-
-dotenv.config();
+const dbAdpt = require('../../adapters/bd-keyvalue/index')
+const tools = require('../../utils/tools')
 
 let queuePort = require('../../ports/queue/index')
-const wait = (timeout) => new Promise(resolve => setInterval(resolve, timeout));
 
 async function init(){
+    Log.log('Conectando na fila')
     await queuePort.open()
+    Log.log('Conectando no publisher')
     await psAdapter.open('VOTE')
 
     Log.log('VOTE_PROCESS INICIADO')
@@ -20,16 +21,15 @@ async function init(){
             try
             { 
                 //EVENT SOURCE
-                await axios.post(`${process.env.DB_URL}/vote/${evt.id}`, evt.data)
+                await dbAdpt.post('vote', evt.id, evt.data)
                 await psAdapter.send('VOTE', 'VOTED', JSON.stringify(evt) )
-                console.info('VOTE SENDED', evt.id)
+                Log.info('VOTE SENDED', evt.id)
             }
             catch(ex)
-            { console.error('erro', ex) }
-                        
+            { Log.error(ex) }
         })
 
-        await wait(1000);
+        await tools.wait(1000);
     }
 }
 

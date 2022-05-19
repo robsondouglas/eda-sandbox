@@ -93,29 +93,6 @@ services:
     networks:
       - eda-sandbox
 
-  membd:
-    hostname: eda-membd
-    container_name: eda-membd
-    build:
-      context: ../
-      dockerfile: .devcontainer/dockerfile
-      args:
-        app_name: build-app-bd
-    networks:
-      - eda-sandbox
-
-  vote:
-    hostname: eda-vote
-    container_name: eda-vote
-    build:
-      context: ../
-      dockerfile: .devcontainer/dockerfile
-      args:
-        app_name: build-app-api
-    networks:
-      - eda-sandbox
-
-
 networks:
   eda-sandbox:
     driver: bridge 

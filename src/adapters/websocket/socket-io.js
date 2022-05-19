@@ -43,7 +43,6 @@ const client = {
         {throw new Error('Mensagem deve ser preenchida')}
     },  
     on : (connName, eventName, delegate) => {
-        console.log('connName', connName, eventName)
         conns[connName].on(eventName, (...msgs)=>{ delegate(msgs)});
     }
 

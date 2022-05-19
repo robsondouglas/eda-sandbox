@@ -53,8 +53,10 @@ async function init(){
         },
     ];
     
-    console.log('INICIANDO VOTE:', process.env.VOTE_PORT)
-    apiPort.start({routes: routes, port: process.env.VOTE_PORT});
+    const port = process.env.PORT_NUMBER 
+    
+    Log.log('INICIANDO VOTE:', port)
+    apiPort.start({routes: routes, port: port});
 
     
 }

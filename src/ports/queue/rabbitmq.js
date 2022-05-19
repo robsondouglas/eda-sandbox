@@ -1,9 +1,9 @@
 const RabbitMQ = require("../../utils/rabbitmq");
-
+const url = process.env.QUEUE_URL;
 const RabbitMQPort = {
-    open :    ()                        => RabbitMQ.open(process.env.QUEUE_URL),
-    receive : ( queueName, callback )   => RabbitMQ.receive(process.env.QUEUE_URL, queueName, callback),
-    close:    ()                        => RabbitMQ.close(process.env.QUEUE_URL)
+    open :    ()                        => RabbitMQ.open(url),
+    receive : ( queueName, callback )   => RabbitMQ.receive(url, queueName, callback),
+    close:    ()                        => RabbitMQ.close(url)
 }
 
 module.exports = RabbitMQPort;
