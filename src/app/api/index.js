@@ -19,7 +19,7 @@ async function init(){
     const routes = [
         {
             method: 'GET',
-            path: 'opcoes',
+            path: '/opcoes',
             delegate:  async()=>({status:200, body: JSON.stringify(opcoes)})
         },
         { 
