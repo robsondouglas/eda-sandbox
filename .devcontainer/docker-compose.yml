@@ -79,8 +79,8 @@ services:
   rabbit:
     image: docker.io/rabbitmq:3.9.14-management
     container_name: eda-rabbit
-    # ports: 
-    #   - 15672:15672
+    ports: 
+      - 15672:15672
     networks:
       - eda-sandbox
   

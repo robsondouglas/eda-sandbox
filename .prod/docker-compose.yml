@@ -108,12 +108,14 @@ services:
     hostname: eda-api-vote
     container_name: eda-api-vote
     image: docker.io/robsondouglas/eda-sandbox-apivote:latest
+    ports:
+      - 5000:5050 #bind da porta que a api vai utilizar pra disponibilizar o serviço http
     environment:
       WRITE_LOG: 1
-      PORT_NUMBER: 5003
-      QUEUE_URL: http://eda-rabbit/
+      PORT_NUMBER: 5050 #porta que a api vai utilizar pra disponibilizar o serviço http
+      QUEUE_URL: amqp://eda-rabbit
       DB_URL:  http://eda-membd:5001/
-    dependsOn:
+    depends_on:
       - rabbit
     networks:
       - eda-sandbox-prod
@@ -124,14 +126,14 @@ services:
     image: docker.io/robsondouglas/eda-sandbox-workervote
     environment:
       WRITE_LOG: 1
-      QUEUE_URL: http://eda-rabbit/
+      QUEUE_URL: amqp://eda-rabbit
       KAFKA_SERVER: "eda-kafka-01:29092, eda-kafka-02:29093, eda-kafka-03:29094"
       KAFKA_GROUP_ID: "eda-01"
       DB_URL:  http://eda-membd:5001/
       WS_URL:  http://eda-eda-ws:5002/
     networks:
       - eda-sandbox-prod
-    dependsOn:
+    depends_on:
       - kafka1
       - kafka2
       - kafka3
@@ -148,7 +150,7 @@ services:
       KAFKA_GROUP_ID: "eda-01"
       DB_URL:  http://eda-membd:5001/
       WS_URL:  http://eda-eda-ws:5002/
-    dependsOn:
+    depends_on:
       - kafka1
       - kafka2
       - kafka3

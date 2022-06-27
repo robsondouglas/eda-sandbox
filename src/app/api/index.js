@@ -5,6 +5,7 @@ dotenv.config();
 const apiPort   = require('../../ports/webserver/index');
 const queueAdpt = require('../../adapters/queue/index');
 const Log       = require('../../adapters/log');
+const bdAdpt    = require('../../adapters/bd-keyvalue/index')
     
 async function init(){
     await queueAdpt.open();
@@ -51,6 +52,20 @@ async function init(){
                 { return {status: 500, body: 'Voto inválido'} }
             }
         },
+
+        {
+            method: 'GET',
+            path: '/votes/:entity/:key',
+            delegate: async()=>{
+
+                
+
+                return {
+                    status: 200,
+                    body: JSON.stringify( bdAdpt.get('all', 'all') )
+                }
+            }
+        }
     ];
     
     const port = process.env.PORT_NUMBER 
