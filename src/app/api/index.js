@@ -8,7 +8,14 @@ const Log       = require('../../adapters/log');
 const bdAdpt    = require('../../adapters/bd-keyvalue/index')
     
 async function init(){
-    await queueAdpt.open();
+    try{ 
+        await queueAdpt.open(); 
+    }
+    catch(ex){
+      console.log('Falha na tentativa de conexão com a fila. Encerrando...');
+      return;   
+    }
+    
 
     let opcoes = [
         {id: '1', nome: 'vermelho', cor: '#ff0000'},
