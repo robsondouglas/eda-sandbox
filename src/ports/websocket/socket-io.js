@@ -9,7 +9,7 @@ const clients = async(port) => await srv(port)?.server.allSockets();
 const server = {
     start : ({port, events, onConnect, onDisconnect}) =>{
         Log.log('Iniciando socket.io', port);
-        io = new Server(port);
+        io = new Server(port, { cors: {origin: '*'} });
         servers.push({ port: port, server: io, rooms: [] });
         
         io.on('connection', (socket) => {

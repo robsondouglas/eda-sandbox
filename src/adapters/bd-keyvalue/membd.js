@@ -3,7 +3,7 @@ const { default: axios } = require('axios')
 const dbUrl = process.env.DB_URL
 
 const MemBD = {
-    get :    async (entityName, key)                                => (await axios.get(`${dbUrl}/${entityName}/${key}`)).data,
+    get :    async (entityName, key)                                => (await axios.get(key ? `${dbUrl}/${entityName}/${key}` : `${dbUrl}/${entityName}`)).data,
     exec:    async (entityName, key, delegate)                      => (await axios.patch(`${dbUrl}/${entityName}/${key}`, {expression: delegate.toString()})).data,
     delete : async (entityName, key)                                => (await axios.delete(`${dbUrl}/${entityName}/${key}`)).data,
     post:    async (entityName, key, value)                         => (await axios.post(`${dbUrl}/${entityName}/${key}`, value)).data,

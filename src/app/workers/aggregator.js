@@ -52,11 +52,13 @@ async function init(){
                 //TOTAL GERAL
                 bdAdpt.exec('all', 'all', expression),
             ]).then(async([totalCor, totalHoraCor, totalHora, totalMinutoCor, totalMinuto, total])=>{
-                
                 let res = { 
-                    totalHora:      totalHora.value.qtd,
-                    totalMinuto:    totalMinuto.value.qtd,
-                    total:          total.value.qtd
+                    totalCor:       {id: totalCor.key,          qtd: totalCor.value.qtd},
+                    totalHora:      {id: totalHora.key,         qtd: totalHora.value.qtd},
+                    totalHoraCor:   {id: totalHoraCor.key,      qtd: totalHoraCor.value.qtd},
+                    totalMinuto:    {id: totalMinuto.key,       qtd: totalMinuto.value.qtd},
+                    totalMinutoCor: {id: totalMinutoCor.key,    qtd: totalMinutoCor.value.qtd},
+                    total:          {id: total.key,             qtd: total.value.qtd}
                 }
                 
                 await wsAdpt.send({connName: 'NOTIFY', eventName: 'QTD_NOTIFICATION', msg:  JSON.stringify(res)})

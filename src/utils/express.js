@@ -1,4 +1,5 @@
 const Log = require('../adapters/log');
+const cors = require('cors');
 
 function bindRoutes(app, { method, path, delegate }) {
     app[method.toLowerCase()]?.(path, async (request, response, next) => {
@@ -23,6 +24,7 @@ const server = {
         return new Promise((resolve, reject) => {
             const express = require('express');
             const _app = express();
+            _app.use(cors({origin: '*'}))
             _app.use(express.json());
             _app.use(express.urlencoded({ extended: true }));
 
