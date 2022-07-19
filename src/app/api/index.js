@@ -8,10 +8,10 @@ const Log       = require('../../adapters/log');
 const bdAdpt    = require('../../adapters/bd-keyvalue/index')
     
 async function init(){
-    try{ 
-        await queueAdpt.open(); 
-    }
-    catch(ex){
+    try
+    { await queueAdpt.open(); }
+    catch(ex)
+    {
       console.log('Falha na tentativa de conexão com a fila. Encerrando...');
       return;   
     }
@@ -62,14 +62,21 @@ async function init(){
 
         {
             method: 'GET',
-            path: '/votes/:entity/:key',
+            path: '/votes/',
             delegate: async()=>{
-
-                
-
                 return {
                     status: 200,
-                    body: JSON.stringify( bdAdpt.get('all', 'all') )
+                    body: JSON.stringify(await bdAdpt.get('cor'))
+                }
+            }
+        },
+        {
+            method: 'GET',
+            path: '/votesminutes/',
+            delegate: async()=>{
+                return {
+                    status: 200,
+                    body: JSON.stringify(await bdAdpt.get('min_cor'))
                 }
             }
         }

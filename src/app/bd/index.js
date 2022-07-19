@@ -16,6 +16,9 @@ const eng = {
         }
         
     },
+    
+    list: (entity) => (db[entity] === undefined) ? [] : db[entity],
+    
     find : (entity, key)        => db[entity]?.find( f=> f.key === key),
     save:   (entity, key, value) => {
         if(!db[entity])
@@ -74,12 +77,14 @@ async function init(){
             method: 'GET',  
             path:'/bd/:entity/:key',  
             delegate: async({params}) => {
-                if(params.key) {
-                    let res = eng.find(params.entity, params.key)
-                    return res ? {status:200, body: res} : {status:404}
-                }
-                else
-                { return eng.list(params.entity) }
+                return {status:200, body: eng.find(params.entity, params.key) || ''}
+            }
+        },
+        { 
+            method: 'GET',  
+            path:'/bd/:entity',  
+            delegate: async({params}) => {
+                 return {status:200, body: eng.list(params.entity)}
             }
         },
         { 
