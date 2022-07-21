@@ -15,4 +15,4 @@ RUN rm -rf src/
 WORKDIR /usr/api/dist
 EXPOSE $port_number
 ENV PORT_NUMBER=$port_number
-CMD node index.js
+ENTRYPOINT ["node", "index.js"]
