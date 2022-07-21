@@ -1,4 +1,4 @@
-FROM node:17 as init
+FROM node:17.9.1-alpine3.15 as init
 WORKDIR /usr/api
 COPY webpack.config.js .
 COPY package.json .

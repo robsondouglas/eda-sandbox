@@ -87,7 +87,7 @@ services:
   membd:
     hostname: eda-prd-membd
     container_name: eda-prd-membd
-    image: docker.io/robsondouglas/eda-prd-sandbox-bdmem:latest
+    image: docker.io/robsondouglas/eda-sandbox-bdmem:latest
     environment:
       WRITE_LOG: 1
       PORT_NUMBER: 5001
@@ -97,7 +97,7 @@ services:
   ws:
     hostname: eda-prd-ws
     container_name: eda-prd-ws
-    image: docker.io/robsondouglas/eda-prd-sandbox-websocket:latest    
+    image: docker.io/robsondouglas/eda-sandbox-websocket:latest    
     environment:
       WRITE_LOG: 1
       PORT_NUMBER: 5002
@@ -107,14 +107,14 @@ services:
   apivote:
     hostname: eda-prd-api-vote
     container_name: eda-prd-api-vote
-    image: docker.io/robsondouglas/eda-prd-sandbox-apivote:latest
+    image: docker.io/robsondouglas/eda-sandbox-apivote:latest
     ports:
       - 5000:5050 #bind da porta que a api vai utilizar pra disponibilizar o serviço http
     environment:
       WRITE_LOG: 1
       PORT_NUMBER: 5050 #porta que a api vai utilizar pra disponibilizar o serviço http
       QUEUE_URL: amqp://eda-prd-rabbit
-      DB_URL:  http://eda-prd-membd:5001/
+      DB_URL:  http://eda-prd-membd:5001/bd
     depends_on:
       - rabbit
     networks:
@@ -123,13 +123,13 @@ services:
   wrkvote:
     hostname: eda-prd-wrk-vote
     container_name: eda-prd-wrk-vote
-    image: docker.io/robsondouglas/eda-prd-sandbox-workervote:latest
+    image: docker.io/robsondouglas/eda-sandbox-workervote:latest
     environment:
       WRITE_LOG: 1
       QUEUE_URL: amqp://eda-prd-rabbit
       KAFKA_SERVER: "eda-prd-kafka-01:29092, eda-prd-kafka-02:29093, eda-prd-kafka-03:29094"
       KAFKA_GROUP_ID: "eda-prd-01"
-      DB_URL:  http://eda-prd-membd:5001/
+      DB_URL:  http://eda-prd-membd:5001/bd
       WS_URL:  http://eda-prd-eda-prd-ws:5002/
     networks:
       - eda-prd-sandbox
@@ -143,12 +143,12 @@ services:
   wrkaggr:
     hostname: eda-prd-wrk-aggr
     container_name: eda-prd-wrk-aggr
-    image: docker.io/robsondouglas/eda-prd-sandbox-workeraggregator:latest 
+    image: docker.io/robsondouglas/eda-sandbox-workeraggregator:latest 
     environment:
       WRITE_LOG: 1
       KAFKA_SERVER: "eda-prd-kafka-01:29092, eda-prd-kafka-02:29093, eda-prd-kafka-03:29094"
       KAFKA_GROUP_ID: "eda-prd-01"
-      DB_URL:  http://eda-prd-membd:5001/
+      DB_URL:  http://eda-prd-membd:5001/bd
       WS_URL:  http://eda-prd-eda-prd-ws:5002/
     depends_on:
       - kafka1
