@@ -1,5 +1,3 @@
-const dotenv = require('dotenv')
-dotenv.config();
 const apiPort   = require('../../ports/webserver/index');
 const Log       = require('../../adapters/log');
     
@@ -70,6 +68,7 @@ async function init(){
             method: 'POST',  
             path:'/bd/:entity/take',  
             delegate: async({params}) => {
+                Log.log('POST take:', params)
                 return {status:200, body: eng.take(params.entity, params.page, params.size)}
             }
         },
@@ -77,6 +76,7 @@ async function init(){
             method: 'GET',  
             path:'/bd/:entity/:key',  
             delegate: async({params}) => {
+                Log.log('GET:', params)
                 return {status:200, body: eng.find(params.entity, params.key) || ''}
             }
         },
@@ -84,13 +84,15 @@ async function init(){
             method: 'GET',  
             path:'/bd/:entity',  
             delegate: async({params}) => {
-                 return {status:200, body: eng.list(params.entity)}
+                Log.log('GET:', params)
+                return {status:200, body: eng.list(params.entity)}
             }
         },
         { 
             method: 'POST',  
             path:'/bd/:entity/:key',  
             delegate: async({params, body}) => {
+                Log.log('POST key:', params)
                 eng.save(params.entity, params.key, body)
                 return {status:201}
             }
@@ -99,6 +101,7 @@ async function init(){
             method: 'PATCH',  
             path:'/bd/:entity/:key',  
             delegate: async({params, body}) => {
+                Log.log('PATCH:', params)
                 let res = eng.exec(params.entity, params.key, body.expression)
                 return {status:200, body: res}
             }
