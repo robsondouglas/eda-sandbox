@@ -77,8 +77,9 @@ services:
       - zookeeper
 
   rabbit:
-    image: docker.io/rabbitmq:3.9.14-management
+    hostname: eda-prd-rabbit
     container_name: eda-prd-rabbit
+    image: docker.io/rabbitmq:3.9.14-management
     # ports: 
     #   - 15672:15672
     networks:
@@ -88,9 +89,11 @@ services:
     hostname: eda-prd-membd
     container_name: eda-prd-membd
     image: docker.io/robsondouglas/eda-sandbox-bdmem:latest
+    ports: 
+      - 5050:5050
     environment:
       WRITE_LOG: 1
-      PORT_NUMBER: 5001
+      PORT_NUMBER: 5050
     networks:
       - eda-prd-sandbox
 
@@ -100,7 +103,7 @@ services:
     image: docker.io/robsondouglas/eda-sandbox-websocket:latest    
     environment:
       WRITE_LOG: 1
-      PORT_NUMBER: 5002
+      PORT_NUMBER: 5051
     networks:
       - eda-prd-sandbox
 
@@ -108,13 +111,11 @@ services:
     hostname: eda-prd-api-vote
     container_name: eda-prd-api-vote
     image: docker.io/robsondouglas/eda-sandbox-apivote:latest
-    ports:
-      - 5000:5050 #bind da porta que a api vai utilizar pra disponibilizar o serviço http
     environment:
       WRITE_LOG: 1
-      PORT_NUMBER: 5050 #porta que a api vai utilizar pra disponibilizar o serviço http
+      PORT_NUMBER: 5052 #porta que a api vai utilizar pra disponibilizar o serviço http
       QUEUE_URL: amqp://eda-prd-rabbit
-      DB_URL:  http://eda-prd-membd:5001/bd
+      DB_URL:  http://eda-prd-membd:5050/bd
     depends_on:
       - rabbit
     networks:
@@ -126,11 +127,11 @@ services:
     image: docker.io/robsondouglas/eda-sandbox-workervote:latest
     environment:
       WRITE_LOG: 1
-      QUEUE_URL: amqp://eda-prd-rabbit
       KAFKA_SERVER: "eda-prd-kafka-01:29092, eda-prd-kafka-02:29093, eda-prd-kafka-03:29094"
       KAFKA_GROUP_ID: "eda-prd-01"
-      DB_URL:  http://eda-prd-membd:5001/bd
-      WS_URL:  http://eda-prd-eda-prd-ws:5002/
+      QUEUE_URL: amqp://eda-prd-rabbit
+      DB_URL:  http://eda-prd-membd:5050/bd
+      WS_URL:  http://eda-prd-ws:5051/
     networks:
       - eda-prd-sandbox
     depends_on:
@@ -148,16 +149,29 @@ services:
       WRITE_LOG: 1
       KAFKA_SERVER: "eda-prd-kafka-01:29092, eda-prd-kafka-02:29093, eda-prd-kafka-03:29094"
       KAFKA_GROUP_ID: "eda-prd-01"
-      DB_URL:  http://eda-prd-membd:5001/bd
-      WS_URL:  http://eda-prd-eda-prd-ws:5002/
+      DB_URL:  http://eda-prd-membd:5050/bd
+      WS_URL:  http://eda-prd-ws:5051/
     depends_on:
       - kafka1
       - kafka2
       - kafka3
       - ws
+      - membd
     networks:
       - eda-prd-sandbox
-
+  
+  front-angular:
+    hostname: eda-prd-angular
+    container_name: eda-prd-angular
+    image: docker.io/robsondouglas/eda-front-angular:latest
+    ports:
+      - 9000:80 #bind da porta que a api vai utilizar pra disponibilizar o serviço http
+    environment:
+      WS_URL: http://eda-prd-ws:5051/socket.io/
+      API_URL: http://eda-prd-api-vote:5052/
+    depends_on:
+      - ws
+      - apivote
 networks:
   eda-prd-sandbox:
     driver: bridge
