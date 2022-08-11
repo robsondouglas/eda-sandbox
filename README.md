@@ -8,11 +8,14 @@ Boa parte desse material está disponível no Youtube.
 
 ## TO-DOs
 São tantos que preciso da ajuda de vocês pra montar essa lista, mas vou colocar algumas coisas que acredito que possam ser úteis
-- [ ] Front-end de votação
-- [ ] Front-end de monitoramento
+- [x] Front-end de votação
+- [x] Front-end de monitoramento
 - [ ] 100% de cobertura de testes
 
-## Código de conduta
+## RODANDO LOCAL
+Baixe o .prod/docker-compose.yml (pode usar curl -O https://raw.githubusercontent.com/robsondouglas/eda-sandbox/4dd9558c50dcea90b9d8a0acbc01173da0c2c663/.prod/docker-compose.yml) e execute com o seu container runtime preferido.
+
+## CÓDIGO DE CONDUTA
 Inicialmente será apenas o nosso grupo de estudos que terá os PRs aprovados. Pra isso, basta avisar la no Whatsapp e vou autorizando aqui  
 
 ## DESENVOLVIMENTO
