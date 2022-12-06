@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zookeeper
+  labels:
+    app: zookeeper
+spec:
+  selector:
+    matchLabels:
+      app: zookeeper
+  template:
+    metadata:
+      labels:
+        app: zookeeper
+    spec:
+      containers:
+        - name: zookeeper
+          image: docker.io/bitnami/zookeeper:3.8
+          env:
+            - name: ALLOW_ANONYMOUS_LOGIN
+              value: yes

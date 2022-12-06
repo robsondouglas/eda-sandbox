@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: eda
+  name: zookeeper-deploy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api-zookeeper
+  template:
+    metadata:
+      labels:
+        app: api-zookeeper
+    spec:
+      containers:
+      - name: zoo1
+        image: docker.io/bitnami/zookeeper:3.8
+        ports:
+        - containerPort: 2181
+        env:
+        - name: api-zookeeper
+          value: "1"
+        - name: ZOOKEEPER_SERVER_1
+          value: zoo1

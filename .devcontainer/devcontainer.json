@@ -1,0 +1,5 @@
+{
+    "name": "EDA",
+    "dockerComposeFile": ".",
+    "service": "source"
+}

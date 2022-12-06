@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: eda
+  labels:
+    app: zookeeper-svc
+  name:  zookeeper-svc
+spec:
+  type: NodePort
+  ports:
+    - name: zookeeper-port
+      port: 2181
+      nodePort: 30181
+      targetPort: 2181
+  selector:
+    app: api-zookeeper
