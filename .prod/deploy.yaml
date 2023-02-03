@@ -1,21 +1,76 @@
-apiVersion: apps/v1
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: eda-config
+  namespace: eda-sandbox
+data:
+  mem-bd: |
+    WRITE_LOG=1
+    PORT_NUMBER=4042
+    QUEUE_URL=amqp://eda-rabbit
+    DB_URL=http://eda-membd:5050/bd
+  eda-vote: |
+    WRITE_LOG=1
+    PORT_NUMBER=4042
+    QUEUE_URL=amqp://eda-rabbit
+    DB_URL=http://eda-membd:5050/bd
+---
+apiVersion: v1
 kind: Deployment
 metadata:
-  name: zookeeper
-  labels:
-    app: zookeeper
+  name: eda-api-vote
+  namespace: eda-sandbox
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: zookeeper
+      app: api-vote-app
   template:
     metadata:
       labels:
-        app: zookeeper
+        app: api-vote-app
     spec:
       containers:
-        - name: zookeeper
-          image: docker.io/bitnami/zookeeper:3.8
+        - name: api-vote-ctn
+          image: docker.io/robsondouglas/eda-sandbox-apivote:latest
           env:
-            - name: ALLOW_ANONYMOUS_LOGIN
-              value: yes
+            -
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+          - containerPort: 5052
+          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: simple-rest-golang-service
+  namespace: retail-project-dev
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+    name: tcp
+  selector:
+    app: simple-rest-golang
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-sandbox
+  namespace: eda-sandbox
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: eda-api-vote-svc
+          servicePort:  8081

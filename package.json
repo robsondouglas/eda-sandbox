@@ -19,8 +19,11 @@
   "author": "Robson Moraes",
   "license": "ISC",
   "dependencies": {
+    "@openfeature/flagd-provider": "^0.7.0",
+    "@openfeature/js-sdk": "^1.0.0",
     "amqplib": "^0.8.0",
     "axios": "^0.26.1",
+    "captcha-canvas": "^3.2.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",

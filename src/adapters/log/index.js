@@ -1,10 +1,14 @@
-const logAdapter = require('./console');
-const allow = process.env.WRITE_LOG === '1';
+const { readStringFlag } = require('../../ff');
+
+const getAdapter = async() =>{
+    return require(await readStringFlag('adapter-log', 'console'));
+}
+
 const Log = {
-    log :  (msg, ...msgs)=> allow && logAdapter.log(msg, msgs),
-    warn:  (msg, ...msgs)=> allow && logAdapter.warn(msg, msgs),
-    error: (msg, ...msgs)=> allow && logAdapter.error(msg, msgs),
-    info:  (msg, ...msgs)=> allow && logAdapter.info(msg, msgs),
+    log :  async (msg, ...msgs)=> (await getAdapter()).log(msg, msgs),
+    warn:  async (msg, ...msgs)=> (await getAdapter()).warn(msg, msgs),
+    error: async (msg, ...msgs)=> (await getAdapter()).error(msg, msgs),
+    info:  async (msg, ...msgs)=> (await getAdapter()).info(msg, msgs),
 }
 
 module.exports = Log;

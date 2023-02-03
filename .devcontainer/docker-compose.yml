@@ -84,6 +84,20 @@ services:
     networks:
       - eda-sandbox
   
+  flagd:
+    image: ghcr.io/open-feature/flagd:v0.2.4
+    container_name: eda-flagd
+    command:
+      - start
+      - --uri
+      - /etc/flagd/flags.json
+    volumes:
+      - ./config/flags.json:/etc/flagd/flags.json
+    networks:
+      - eda-sandbox
+    expose:
+      - "8013"
+
   source:
     image: node:17
     container_name: eda-source

@@ -1,69 +1,109 @@
 const dotenv = require('dotenv')
-const {randomUUID} = require('crypto');
 dotenv.config();
+const {randomUUID} = require('crypto');
+const { readStringFlag, readObjectFlag } = require('../../ff');
 
 const apiPort   = require('../../ports/webserver/index');
 const queueAdpt = require('../../adapters/queue/index');
 const Log       = require('../../adapters/log');
-const bdAdpt    = require('../../adapters/bd-keyvalue/index')
+const bdAdpt    = require('../../adapters/bd-keyvalue/index');
+const { createCaptcha, createCaptchaSync } = require('captcha-canvas');
+const { wait, retry } = require('../../utils/tools');
     
 async function init(){
-    try
-    { await queueAdpt.open(); }
-    catch(ex)
-    {
-      console.log('Falha na tentativa de conexão com a fila. Encerrando...');
-      return;   
-    }
+    await retry(()=>{
+        console.log('Aguardando conectividade com a fila...');
+        queueAdpt.open()
+    },0,1000);
     
-
-    let opcoes = [
-        {id: '1', nome: 'vermelho', cor: '#ff0000'},
-        {id: '2', nome: 'amarelo', cor: '#ffff00'},
-        {id: '3', nome: 'verde', cor: '#00ff00'},
-        {id: '4', nome: 'azul', cor: '#0000ff'}        
-    ]
-
+    
     const routes = [
         {
             method: 'GET',
             path: '/opcoes',
-            delegate:  async()=>({status:200, body: JSON.stringify(opcoes)})
+            delegate:  async()=>{
+                const {items} = await readObjectFlag('options');
+                return {status:200, body: JSON.stringify(items)}
+            }
+        },
+        {
+            method: 'GET',
+            path: '/ux',
+            delegate: async()=>  ({status:200, body: JSON.stringify(await readObjectFlag('ux'))})            
+        },
+        {
+            method: 'GET',
+            path: '/captcha',
+            delegate: async()=> {
+                const {captcha} = await readObjectFlag('ux');
+                
+                if(captcha){
+                    try{
+                        const { image, text } = createCaptchaSync(300, 100);
+                        const hash = randomUUID();
+                        bdAdpt.post('captcha', hash, {secret: text});
+                        console.log(hash, text)
+                        return { status: 200, body: JSON.stringify({ hash, img: image.toString('base64') }) }
+                    }
+                    catch(ex){
+                        //console.log(ex);
+                        return {status: 200, body: 'Erro ao gerar captcha'}
+                    }
+                }
+                else{
+                    return {status: 404, body: 'Not Found'}
+                }
+            }
         },
         { 
             method: 'POST',  
             path:'/vote',  
             delegate: async({body}) => {
-                Log.log('Votando', body)                        
-                let itm = opcoes.find( f=> f.id === body.id )
-                if(itm)
-                {
-                    try{
-                        let evt = { 
-                            id: randomUUID(), 
-                            data: itm,
-                            timestamp: (new Date()).valueOf() 
-                        }
-
-                        await queueAdpt.send('VOTE', evt)
-
-                        Log.log('Voto salvo', evt)
-                        return {status:201, body: ''}
+                Log.log('Votando', body)
+                const {items} = await readObjectFlag('options');
+                const {captcha} = await readObjectFlag('ux');
+                if(captcha){
+                    if(!body.code || !body.hash ){
+                        return { status: 500, body: 'Implemente o captcha' }
                     }
-                    catch(ex){
-                        Log.error('Erro ao registrar voto', ex)
-                        return {status:500, body: ex}
+                    else 
+                    {
+                        const _hash = await bdAdpt.get('captcha', body.hash);
+                        console.log('hash', _hash)
+                        if( _hash?.value?.secret?.toLowerCase() !== body.code.toLowerCase() )
+                        {
+                            return { status: 500, body: 'Captcha incorreto' }
+                        }
                     }
                 }
-                else 
+                 
+                let itm = items.find( f=> f.id === body.id )
+                if(!itm)
                 { return {status: 500, body: 'Voto inválido'} }
+                
+                try{
+                    let evt = { 
+                        id: randomUUID(), 
+                        data: itm,
+                        timestamp: (new Date()).valueOf() 
+                    };
+
+                    await queueAdpt.send('VOTE', evt);
+
+                    Log.log('Voto salvo', evt);
+                    return {status:201, body: ''};
+                }
+                catch(ex){
+                    Log.error('Erro ao registrar voto', ex)
+                    return {status:500, body: ex}
+                }
             }
         },
 
         {
             method: 'GET',
             path: '/votes/',
-            delegate: async()=>{
+            delegate: async()=> {
                 return {
                     status: 200,
                     body: JSON.stringify(await bdAdpt.get('cor'))

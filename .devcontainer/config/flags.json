@@ -1,0 +1,60 @@
+{
+  "flags": {
+    "adapter-log": {
+      "state": "ENABLED",
+      "variants": {
+        "console": "./console",
+        "console-upper": "./console-upper"
+      },
+      "defaultVariant": "console"
+    }, 
+    "ux": {
+      "state": "ENABLED",
+      "variants": {
+         "fast": {
+            "captcha": false,
+            "waitNext": 0,
+            "navigateToResult": false,
+            "layout": "double"             
+         },
+         "medium": {
+          "captcha": true,
+          "waitNext": 5,
+          "navigateToResult": false,
+          "layout": "double"             
+        },
+        "slow": {
+          "captcha": true,
+          "waitNext": 30,
+          "navigateToResult": true,
+          "layout": "single"             
+        }
+      },
+      "defaultVariant": "medium"
+    },  
+    "options": {
+      "state": "ENABLED",
+      "variants": {
+        "schema1": {
+            "id": 1,
+            "items":[
+              {"id": 1, "nome": "Peter", "cor": "#f00", "src": "https://as1.ftcdn.net/v2/jpg/02/22/85/16/1000_F_222851624_jfoMGbJxwRi5AWGdPgXKSABMnzCQo9RN.jpg"},
+              {"id": 2, "nome": "Mary",  "cor": "#ff0", "src": "https://as2.ftcdn.net/v2/jpg/01/51/99/39/1000_F_151993994_mmAYzngmSbNRr6Fxma67Od3WHrSkfG5I.jpg"},
+              {"id": 3, "nome": "Liza",    "cor": "#0f0", "src": "https://as2.ftcdn.net/v2/jpg/02/60/03/61/1000_F_260036118_AUYppgsODQeTCnbu0OXGNDXB8EVzpxKq.jpg"},
+              {"id": 4, "nome": "Bob",     "cor": "#00f", "src": "https://as1.ftcdn.net/v2/jpg/01/41/71/88/1000_F_141718851_medgS5EBKZEmf8WMRMqN8pJO7JD5R5D4.jpg"}
+            ] 
+        },
+        "schema2": {
+          "id": 2,
+          "items":[
+              {"id": 1, "nome": "vermelho", "cor": "#f55", "src": "https://as2.ftcdn.net/v2/jpg/02/44/00/23/1000_F_244002364_LQELgqH8utkxb0NdpUrcxPjtJ7bNt6J4.jpg"},
+              {"id": 2, "nome": "amarelo",  "cor": "#ff5", "src": "https://as2.ftcdn.net/v2/jpg/01/55/04/97/1000_F_155049786_Ch17gRfPjmKG5N9S21VMs8LWBkjkfVDi.jpg"},
+              {"id": 3, "nome": "verde",    "cor": "#5f5", "src": "https://as2.ftcdn.net/v2/jpg/01/42/20/17/1000_F_142201762_qMCuIAolgpz4NbF5T5m66KQJzYzrEbUv.jpg"},
+              {"id": 4, "nome": "azul",     "cor": "#55f", "src": "https://as1.ftcdn.net/v2/jpg/03/83/44/02/1000_F_383440275_FYY8fNBDKvIcJitcPEEyrjptijDql9hr.jpg"}        
+          ]
+        }
+      },
+      "defaultVariant": "schema1"
+    }
+  }
+}

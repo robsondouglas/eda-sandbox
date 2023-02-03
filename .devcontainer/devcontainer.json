@@ -1,5 +1,7 @@
 {
     "name": "EDA",
-    "dockerComposeFile": ".",
-    "service": "source"
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "source",
+    "workspaceFolder": "/workspace/source",
+    "shutdownAction": "stopCompose"
 }
