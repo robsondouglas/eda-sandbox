@@ -1,5 +1,4 @@
-const config = require('../../../config')
-const api = require(config.ports.webserver);
+const api = require('./node-express');//require('./fastify');
 
 const server = {
     start: async (prms) => await api.start(({routes: prms.routes, port: prms.port})),
