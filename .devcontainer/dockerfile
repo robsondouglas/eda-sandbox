@@ -1,0 +1,18 @@
+FROM node:17.9.1-alpine3.15 as init
+WORKDIR /usr/api
+COPY webpack.config.js .
+COPY package.json .
+RUN npm i
+
+FROM init as source
+COPY src/ ./src
+
+FROM source as build
+ARG app_name
+ARG port_number=8080
+RUN npm run $app_name
+RUN rm -rf src/
+WORKDIR /usr/api/dist
+EXPOSE $port_number
+ENV PORT_NUMBER=$port_number
+ENTRYPOINT ["node", "index.js"]

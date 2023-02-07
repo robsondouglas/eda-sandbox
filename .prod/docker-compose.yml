@@ -87,14 +87,14 @@ services:
   
   flagd:
     image: ghcr.io/open-feature/flagd:v0.3.6
-    container_name: eda-flagd
-    hostname: eda-flagd
+    container_name: eda-prd-flagd
+    hostname: eda-prd-flagd
     command:
       - start
       - --uri
       - https://raw.githubusercontent.com/robsondouglas/eda-sandbox/main/.prod/flags.json
     networks:
-      - eda-sandbox
+      - eda-prd-sandbox
     expose: 
       - "8013"
 
@@ -131,6 +131,7 @@ services:
       PORT_NUMBER: 5052 #porta que a api vai utilizar pra disponibilizar o serviço http
       QUEUE_URL: amqp://eda-prd-rabbit
       DB_URL:  http://eda-prd-membd:5050/bd
+      FLAGD_HOST: eda-prd-flagd
     depends_on:
       - rabbit
     networks:
@@ -183,7 +184,7 @@ services:
       - 9000:80 #bind da porta que a api vai utilizar pra disponibilizar o serviço http
     environment:
       WS_URL: http://eda-prd-ws:5051/socket.io/
-      API_URL: http://eda-prd-api-vote:5052/
+      API_URL: http://eda-prd-api-vote:5052/      
     networks:
       - eda-prd-sandbox
     depends_on:

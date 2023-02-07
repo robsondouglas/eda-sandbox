@@ -4,7 +4,7 @@ const {FlagdProvider} = require('@openfeature/flagd-provider')
 
 console.log('init');
 OpenFeature.setProvider(new FlagdProvider({
-  host: 'eda-flagd',
+  host: process.env.FLAGD_HOST,
   port: 8013,
   //socketPath: "/tmp/flagd.socks",
 }));
