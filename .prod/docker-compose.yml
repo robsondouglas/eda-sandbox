@@ -85,6 +85,19 @@ services:
     networks:
       - eda-prd-sandbox
   
+  flagd:
+    image: ghcr.io/open-feature/flagd:v0.3.6
+    container_name: eda-flagd
+    hostname: eda-flagd
+    command:
+      - start
+      - --uri
+      - https://raw.githubusercontent.com/robsondouglas/eda-sandbox/main/.prod/flags.json
+    networks:
+      - eda-sandbox
+    expose: 
+      - "8013"
+
   membd:
     hostname: eda-prd-membd
     container_name: eda-prd-membd

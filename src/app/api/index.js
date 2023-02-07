@@ -42,11 +42,9 @@ async function init(){
                         const { image, text } = createCaptchaSync(300, 100);
                         const hash = randomUUID();
                         bdAdpt.post('captcha', hash, {secret: text});
-                        console.log(hash, text)
                         return { status: 200, body: JSON.stringify({ hash, img: image.toString('base64') }) }
                     }
                     catch(ex){
-                        //console.log(ex);
                         return {status: 200, body: 'Erro ao gerar captcha'}
                     }
                 }
@@ -63,17 +61,14 @@ async function init(){
                 const {items} = await readObjectFlag('options');
                 const {captcha} = await readObjectFlag('ux');
                 if(captcha){
-                    if(!body.code || !body.hash ){
-                        return { status: 500, body: 'Implemente o captcha' }
-                    }
+                    if(!body.code || !body.hash )
+                    { return { status: 500, body: 'Implemente o captcha' } }
                     else 
                     {
                         const _hash = await bdAdpt.get('captcha', body.hash);
-                        console.log('hash', _hash)
+                        
                         if( _hash?.value?.secret?.toLowerCase() !== body.code.toLowerCase() )
-                        {
-                            return { status: 500, body: 'Captcha incorreto' }
-                        }
+                        { return { status: 500, body: 'Captcha incorreto' } }
                     }
                 }
                  

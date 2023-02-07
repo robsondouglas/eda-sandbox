@@ -37,11 +37,8 @@ const update = async({body})=>{
 };
 
 const _delete = async({params})=>{
-    console.log('delete: ', params);
     let idx = expected.items.findIndex(f=>f.id === params.id);
-    console.log('index: ', idx);
     expected.items.splice(idx, 1);
-    console.log('length: ', expected.items.length);
     return { status: 200 };
 };
 
