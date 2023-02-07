@@ -133,7 +133,9 @@ services:
       DB_URL:  http://eda-prd-membd:5050/bd
       FLAGD_HOST: eda-prd-flagd
     depends_on:
+      - membd
       - rabbit
+      - flagd
     networks:
       - eda-prd-sandbox
 
@@ -190,6 +192,7 @@ services:
     depends_on:
       - ws
       - apivote
+      - flagd
 
 networks:
   eda-prd-sandbox:

@@ -3,17 +3,24 @@ dotenv.config();
 const Log = require('../../adapters/log')
 const psAdapter = require('../../adapters/pubsub/index')
 const dbAdpt = require('../../adapters/bd-keyvalue/index')
-const tools = require('../../utils/tools')
+const {wait, retry} = require('../../utils/tools')
 
 let queuePort = require('../../ports/queue/index')
 
 async function init(){
-    Log.log('Conectando na fila')
-    await queuePort.open()
-    Log.log('Conectando no publisher')
-    await psAdapter.open('VOTE')
+    await retry(async()=>{
+        Log.log('Conectando na fila')
+        await queuePort.open()
+    },0,1000);
+
+    await retry(async()=>{
+        Log.log('Conectando no publisher')
+        await psAdapter.open('VOTE');    
+    },0,1000);
+    
 
     Log.log('VOTE_PROCESS INICIADO')
+    
     while(true)
     {
         await queuePort.receive('VOTE', async(msg)=>{
@@ -29,7 +36,7 @@ async function init(){
             { Log.error(ex) }
         })
 
-        await tools.wait(1000);
+        await wait(1000);
     }
 }
 

@@ -4,14 +4,20 @@ dotenv.config();
 const Log    = require('../../adapters/log')
 const psPort = require('../../ports/pubsub/index')
 const wsAdpt = require('../../adapters/websocket/index')
-const bdAdpt = require('../../adapters/bd-keyvalue/index')
+const bdAdpt = require('../../adapters/bd-keyvalue/index');
+const { retry } = require('../../utils/tools');
 
 async function init(){
-    Log.log('INICIANDO... PUBSUB')
-    await psPort.open('CLI-VOTE')
+    
+    await retry(async()=>{
+        Log.log('INICIANDO... PUBSUB');
+        await psPort.open('CLI-VOTE');
+    },0,1000);
 
-    Log.log('INICIANDO... WEBSOCKER', process.env.WS_URL)
-    await wsAdpt.open({connName: 'NOTIFY', url: process.env.WS_URL});
+    await retry(async()=>{
+        Log.log('INICIANDO... WEBSOCKER', process.env.WS_URL)
+        await wsAdpt.open({connName: 'NOTIFY', url: process.env.WS_URL});
+    },0,1000);
 
     Log.log('AGGREGATOR INICIADO')
     

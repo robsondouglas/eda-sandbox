@@ -11,9 +11,9 @@ const { createCaptcha, createCaptchaSync } = require('captcha-canvas');
 const { wait, retry } = require('../../utils/tools');
     
 async function init(){
-    await retry(()=>{
+    await retry(async()=>{
         console.log('Aguardando conectividade com a fila...');
-        queueAdpt.open()
+        await queueAdpt.open()
     },0,1000);
     
     
